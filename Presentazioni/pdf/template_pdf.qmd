@@ -1,0 +1,49 @@
+---
+title: "Presentation Title"
+subtitle: "Merkanzia GmbH - La Toscana in Svizzera"
+author: "Guido Maggio"
+date: today
+date-format: |
+  | MMMM D, YYYY
+  |
+  |
+  | [guido.maggio@merkanzia.com]
+format:
+  beamer:
+    theme: metropolis
+    monofont: 'Source Code Pro'
+    monofontoptions: 
+      - Scale=0.6
+    
+include-in-header:
+  - header_presentation.tex
+  
+editor: visual
+execute: 
+  echo: false
+  eval: false
+output-dir: docs
+incremental: false
+---
+
+## I nostri formaggi
+
+Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+
+## I nostri affettati
+
+When you click the **Render** button a document will be generated that includes:
+
+-   Content authored with markdown
+-   Ha!
+
+## Le nostre salse
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+#| echo: true
+#| eval: false
+1 + 1
+# very long line with much code that could go into 2 rows if the screen is not large enough, if the font size is small, it would go beyond the right margin
+```

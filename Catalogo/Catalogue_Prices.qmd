@@ -1,0 +1,491 @@
+---
+title: "Catalogo Prezzi B2B"
+subtitle: "Merkanzia GmbH - La Toscana in Svizzera"
+author: ""
+date: today
+# date-format: |
+#   | MMMM D, YYYY
+#   |
+#   |
+#   | [info@merkanzia.com]
+format:
+  pdf:
+    # theme: espresso
+    toc: false
+    colorlinks: true
+    # mainfont: 'Ubuntu'
+    monofont: 'Source Code Pro'
+    # documentclass: report 
+    # classoption: [twocolumn, landscape]
+    # mainfont: "Oswald Regular"
+    monofontoptions: 
+      - Scale=0.6
+    # page-layout: full
+    # template: header_merkanzia.tex
+    # template-partials:
+    #   - header_merkanzia_header.tex
+    # classoption: [landscape] # trigger this with the beamer papersize, to redo the chunks
+    documentclass: scrreprt
+    papersize: beamer
+    classoption: "aspectratio=54"
+    keep-tex: true
+    include-in-header:
+      - header_merkanzia.tex
+  
+editor: visual
+execute: 
+  # echo: false
+  eval: true
+  warning: false
+output-dir: docs
+# incremental: false
+engine: knitr
+---
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(tidyverse)
+library(kableExtra)
+library(knitr)
+
+
+Peso <- c(#"< 4kg", 
+          "< 10 kg", "> 10kg")
+
+
+IClassici <- paste("Sua Eccellenza",c("il Fresco", "il Semi Stagionato", 
+              "lo Stagionato"))
+stagio <- c(20, 60, 90)
+IClassici <- paste(IClassici, paste0("(", stagio, "gg)"))
+
+p_la_f_semistag_orig <- 16.96
+p_la_f_ilfresc_orig <- 15.53
+p_la_f_stag_orig <- 18.09
+
+# p_la_f_semistag <- c(35,33.5,31.5) %>%
+#   setNames(Peso)
+discount_laf <- 0.1
+baseprise <- 35
+
+p_la_f_semistag <- c(baseprise, (1-discount_laf)* baseprise) %>%
+  setNames(Peso)
+
+.price_kg <- function(pec, digits = 2, plist = p_la_f_semistag, ref = p_la_f_semistag_orig) {
+  round(plist * pec / ref, digits)
+}
+
+p_la_f_ilfresc <- .price_kg(p_la_f_ilfresc_orig)
+p_la_f_stag <- .price_kg(p_la_f_stag_orig)
+
+prices_names_cla <- list(
+    p_la_f_ilfresc = .price_kg(p_la_f_ilfresc_orig),
+    p_la_f_semistag = p_la_f_semistag,
+    p_la_f_stag = .price_kg(p_la_f_stag_orig)
+) %>% setNames(IClassici)
+
+
+GliAromatici <- paste("Sua Eccellenza",c("Il Pepe Nero", "Il Pistacchio", "Il Tartufo", "Il Piccante", "La Castagna"))
+stagio <- c(100, 20, 20, 20, 60)
+GliAromatici <- paste(GliAromatici, paste0("(", stagio, "gg)"))
+
+p_la_f_aro_pnero_orig <-  18.43
+p_la_f_aro_pist_orig <-  18.43
+p_la_f_aro_truf_orig <-  22.81
+p_la_f_aro_pic_orig <-  17.41
+p_la_f_aro_cast_orig <-  18.43
+
+prices_names_aro <- list(
+  p_la_f_pnero = .price_kg(p_la_f_aro_pnero_orig),
+  p_la_f_aro_pist = .price_kg(p_la_f_aro_pist_orig),
+  p_la_f_aro_truf = .price_kg(p_la_f_aro_truf_orig),
+  p_la_f_aro_pic = .price_kg(p_la_f_aro_pic_orig),
+  p_la_f_aro_cast = .price_kg(p_la_f_aro_cast_orig)
+) %>% setNames(GliAromatici)
+
+
+GliAffinati <- paste("Sua Eccellenza",c("Il Foglia di Noce", "Il Re Fieno", "Il Germe di grano", "Le Vinacce", "Il Peparello"))
+stagio <- c(90, 70, "60+45", "90+4", 90)
+GliAffinati <- paste(GliAffinati, paste0("(", stagio, "gg)"))
+
+p_la_f_aff_fognoc_orig <-  18.43
+p_la_f_aff_refie_orig <-  18.65
+p_la_f_aff_germdg_orig <-  18.43
+p_la_f_aff_vina_orig <-  18.43
+p_la_f_aff_pepa_orig <-  18.43
+
+
+prices_names_aff <- list(
+  p_la_f_aff_fognoc = .price_kg(p_la_f_aff_fognoc_orig),
+  p_la_f_aff_refie = .price_kg(p_la_f_aff_refie_orig),
+  p_la_f_aff_germdg = .price_kg(p_la_f_aff_germdg_orig),
+  p_la_f_aff_vina = .price_kg(p_la_f_aff_vina_orig),
+  p_la_f_aff_pepa = .price_kg(p_la_f_aff_pepa_orig)
+) %>% setNames(GliAffinati)
+
+
+IGrandieRe <- paste("Sua Eccellenza",c("Il Grande", "Il Re Sole", "Il Re Grotta"))
+stagio <- c(90, 200, "90+60")
+IGrandieRe <- paste(IGrandieRe, paste0("(", stagio, "gg)"))
+
+p_la_f_grare_gra_orig <-  18.31
+p_la_f_grare_resol_orig <-  22.36
+p_la_f_grare_regrot_orig <-  18.76
+
+prices_names_grare <- list(
+  p_la_f_grare_gra = .price_kg(p_la_f_grare_gra_orig),
+  p_la_f_grare_resol = .price_kg(p_la_f_grare_resol_orig),
+  p_la_f_grare_regrot = .price_kg(p_la_f_grare_regrot_orig)) %>% setNames(IGrandieRe)
+
+# ---------------
+
+LatteSiena <- paste(c("Cecco", "Nobile", "Mangia", "Balzana", "Tolomeo", "Fieno"), "Latte Siena")
+stagio <- c(20, 40, "70", "60", 90, 70)
+LatteSiena <- paste(LatteSiena, paste0("(", stagio, "gg)"))
+
+p_la_f_latt_cec_orig <-  16.29
+p_la_f_latt_nob_orig <-  16.78
+p_la_f_latt_man_orig <-  17.50
+p_la_f_latt_balz_orig <-  17.98
+p_la_f_latt_tol_orig <-  19.19
+p_la_f_latt_fie_orig <-  19.54
+
+
+prices_names_latt <- list(
+  p_la_f_latt_cec = .price_kg(p_la_f_latt_cec_orig),
+  p_la_f_latt_nob = .price_kg(p_la_f_latt_nob_orig),
+  p_la_f_latt_man = .price_kg(p_la_f_latt_man_orig),
+  p_la_f_latt_balz = .price_kg(p_la_f_latt_balz_orig),
+  p_la_f_latt_tol = .price_kg(p_la_f_latt_tol_orig),
+  p_la_f_latt_fie = .price_kg(p_la_f_latt_fie_orig)
+
+) %>% setNames(LatteSiena)
+
+col_names <- c("Prodotto", "Quantità" , "CHF/Kg" )
+# colnames_d <- names(data)
+
+main_product_cla <- "I Classici di La Fonte"
+main_product_aro <- "Gli Aromatizzati di La Fonte"
+main_product_aff <- "Gli Affinati di La Fonte"
+main_product_grare <- "Il Grande e i Re"
+main_product_latt <- "Linea Latte di Siena"
+
+
+main_quant_cla <- "Una forma 1,5 kg"
+main_quant_aro <- "Una forma 1,5-3 kg"
+main_quant_aff <- main_quant_aro
+main_quant_grare <- main_quant_aff
+main_quant_latt <- "Una forma 1,5-5 kg"
+
+
+main_pic <- ""
+
+main_header_cla <- tibble(main_product_cla, main_quant_cla, main_pic) %>%
+  setNames(col_names)
+main_header_aro <- tibble(main_product_aro, main_quant_aro, main_pic) %>%
+  setNames(col_names)
+main_header_aff <- tibble(main_product_aff, main_quant_aff, main_pic) %>%
+  setNames(col_names)
+main_header_grare <- tibble(main_product_grare, main_quant_grare, main_pic) %>%
+  setNames(col_names)
+main_header_latt <- tibble(main_product_latt, main_quant_latt, main_pic) %>%
+  setNames(col_names)
+
+
+.makedata_header <- function(main_header, prices_names , peso = Peso) {
+  main_header %>% 
+    bind_rows(tibble(Prodotto = rep(names(prices_names), each = length(peso)), 
+           `Quantita` = rep(peso, times = length(prices_names)),
+           Prezzo = as.character(unlist(prices_names))) %>%
+  setNames(col_names)) 
+}
+
+data_cla <- .makedata_header(main_header_cla, prices_names_cla)
+data_aro <- .makedata_header(main_header_aro, prices_names_aro)
+data_aff <- .makedata_header(main_header_aff, prices_names_aff)
+data_grare <- .makedata_header(main_header_grare, prices_names_grare)
+data_latt <- .makedata_header(main_header_latt, prices_names_latt)
+
+data_all <- bind_rows(data_cla, data_aro, data_aff, data_grare, data_latt)
+
+###############
+# Salumi
+p_s_mons_fin_orig <-  10
+p_s_mons_por_orig <-  10.5
+
+baseprise_por <- 45
+baseprise_fino <- 42
+
+discount_mmos <- 0.08
+
+.price_kg_mons_disc <-  function(pec,  disc, digits = 2) {
+  c(pec, round(pec * (1-disc), digits))
+}
+
+  
+factor_margin <- list("porchette" = c(4.285,3.975), "finocchione" = c(4.18,3.85))
+
+.price_kg_mons <-  function(pec,  marg, digits = 2) {
+  round(marg * pec, digits)
+}
+
+Mac_mon_S_Savino <- c("Macelleria Monte San Savino")
+
+main_product_por <- "Porchetta"
+main_product_fino <- "Finocchiona"
+
+Mac_mon_S_Savino <- c("Tronchetto Cotto a Legna", "Finocchiona IGP")
+
+
+prices_names_mons <- list(
+  p_s_mons_por = .price_kg_mons(p_s_mons_por_orig, factor_margin$porchette),
+  p_s_mons_fin = .price_kg_mons(p_s_mons_fin_orig, factor_margin$finocchione)
+
+) %>% setNames(Mac_mon_S_Savino)
+
+prices_names_mons <- list(
+  p_s_mons_por = .price_kg_mons_disc(baseprise_por, discount_mmos),
+  p_s_mons_fin = .price_kg_mons_disc(baseprise_fino, discount_mmos)
+
+) %>% setNames(Mac_mon_S_Savino)
+
+
+Quantita <- c("1/2 o 1", ">1")
+main_quant_fino <- "10-12 kg"
+main_quant_por <- "8-11 Kg"
+
+main_header_por <- tibble(main_product_por, main_quant_por, main_pic) %>%
+  setNames(col_names)
+main_header_fino <- tibble(main_product_fino, main_quant_fino, main_pic) %>%
+  setNames(col_names)
+
+data_por <- .makedata_header(main_header_por, prices_names_mons[1], peso = Quantita)
+data_fino <- .makedata_header(main_header_fino, prices_names_mons[2], peso = Quantita)
+
+DPI.ALL <- 420
+
+kable_fun <- function(dat, footnote_arg = list(general_title =  "gg: Giorni Stagionatura", general = "" )) {
+  kableExtra::kable(dat, #align = 'l', 
+                  booktabs = TRUE, format = "latex", escape = T) %>%
+        #kable_paper(full_width = F) %>%
+        kable_classic("striped", full_width = F) %>%
+
+      # column_spec(3, image = spec_image("LaFonte_IClassici1024_1.png", 1150, 1150)) %>% 
+      #     knitr::knit_print()#%>% 
+        column_spec(1, width = "3.25cm", bold = F, italic = T) %>%
+        column_spec(2, width = "2.25cm") %>%
+        collapse_rows(columns=1:3, valign="top", row_group_label_position = 'identity', latex_hline = "custom", custom_latex_hline = 1)  %>%
+        kable_styling(position = "left",  latex_options = c("hold_position"), html_font = "Ubuntu Bold", font_size = 9.5) %>% row_spec(row = 0:1, bold = TRUE) %>% footnote(footnote_arg)
+}
+
+```
+
+\renewcommand{\arraystretch}{1.6}
+
+```{r}
+#| label: tbl-panel-cla-aro
+#| tbl-cap-location: top
+#| tbl-cap: "Caseificio La Fonte (Asciano - Siena)"
+#| tbl-subcap:
+#|   - "I Classici"
+#|   - "Gli Aromatizzati"
+#| fig-width: 10
+#| fig-align: "right"
+#| layout: [[60,40], [60,40]]
+#| echo: false
+#| include: true
+
+# cat("\\renewcommand{\\arraystretch}{2}   \n")
+
+knitr::opts_chunk$set(class.source = "watch-out")
+kable_fun(data_cla)
+knitr::include_graphics("../img/LaFonte_IClassici1024_1.jpeg", dpi = DPI.ALL)
+kable_fun(data_aro)
+knitr::include_graphics("../img/LaFonte_gliaromatizzati1024_1.png", dpi = DPI.ALL)
+```
+
+\renewcommand{\arraystretch}{1.6}
+
+```{r}
+#| label: tbl-panel-aff-grare
+#| tbl-cap-location: top
+#| tbl-cap: "Caseificio La Fonte (Asciano - Siena)"
+#| tbl-subcap:
+#|   - "Gli Affinati"
+#|   - "Il Grande ed i Re"
+#| fig-width: 10
+#| fig-align: "right"
+#| layout: [[60,40], [60,40]]
+#| echo: false
+#| include: true
+kable_fun(data_aff)
+knitr::include_graphics("../img/LaFonte_GliAffinati1024_1.png", dpi = DPI.ALL)
+kable_fun(data_grare)
+knitr::include_graphics("../img/IlGrande1024_1.png", dpi = DPI.ALL)
+
+```
+
+\renewcommand{\arraystretch}{1.6}
+
+```{r}
+#| label: tbl-panel-latt
+#| tbl-cap-location: top
+#| tbl-cap: "Caseificio La Fonte (Asciano - Siena)"
+#| tbl-subcap:
+#|   - "Linea Latte di Siena"
+#| fig-width: 10
+#| fig-align: "right"
+#| layout: [[60,40]]
+#| echo: false
+#| include: true
+kable_fun(data_latt)
+knitr::include_graphics("../img/Latte_di_siena1024_1.png", dpi = DPI.ALL)
+```
+
+```{r}
+#| label: tbl-panel-mmons
+#| tbl-cap-location: top
+#| tbl-cap: "Salumeria di Monte San Savino"
+#| tbl-subcap:
+#|   - "Porchette"
+#|   - "Finocchione"
+#| fig-width: 10
+#| fig-align: "right"
+#| layout: [[60,40]]
+#| echo: false
+#| include: true
+
+kable_fun(data_por, footnote_arg = list(general_title =  "Quantità indica il peso di un pezzo", general = "" ))
+knitr::include_graphics("../img/Tronchetto-cotto-a-legna.jpg", dpi = DPI.ALL)
+kable_fun(data_fino, footnote_arg = list(general_title =  "Quantità indica il peso di un pezzo", general = "" ))
+knitr::include_graphics("../img/Finocchiona-IGP.jpg", dpi = DPI.ALL)
+```
+
+<!-- # ```{r} -->
+
+<!-- # #| label: tbl-panel-all -->
+
+<!-- # #| tbl-cap-location: top -->
+
+<!-- # #| tbl-cap: "Caseificio La Fonte (Asciano - Siena)" -->
+
+<!-- # #| fig-width: 10 -->
+
+<!-- # #| fig-align: "right" -->
+
+<!-- # #| echo: false -->
+
+<!-- # #| include: true -->
+
+<!-- # kable_fun(data_all) -->
+
+<!-- #  -->
+
+<!-- # ``` -->
+
+<!-- ## Markdown -->
+
+<!-- ::: {layout-ncol="2"} -->
+
+<!-- ![](LaFonte_IClassici1024_1.png){width="1.5in"} -->
+
+<!-- |        Prodotto        | Quantità         | CHF/kg      | -->
+
+<!-- |:----------------------:|:-----------------|:------------| -->
+
+<!-- |     **I Classici**     | Una forma 1,5 kg |             | -->
+
+<!-- | ---------------------- | ------------     | ----------- | -->
+
+<!-- |     Sua Eccellenza     | \< 4kg           | 32          | -->
+
+<!-- |       il Fresco        | \< 10kg          | 30.7        | -->
+
+<!-- |                        | \> 10kg          | 28.8        | -->
+
+<!-- | ---------------------- | ------------     | ----------- | -->
+
+<!-- |     Sua Eccellenza     | \< 4kg           | 35          | -->
+
+<!-- |   il Semistagionato    | \< 10kg          | 33.5        | -->
+
+<!-- |                        | \> 10kg          | 31.5        | -->
+
+<!-- | ---------------------- | ------------     | ----------- | -->
+
+<!-- |     Sua Eccellenza     | \< 4kg           | 37.3        | -->
+
+<!-- |     lo Stagionato      | \< 10kg          | 35.7        | -->
+
+<!-- |                        | \> 10kg          | 33.6        | -->
+
+<!-- |  --------------------  | -----------      | ----------- | -->
+
+<!-- ![](LaFonte_gliaromatizzati1024_1.png){width="1.5in"} -->
+
+<!-- |        Prodotto        | Quantità           | CHF/kg      | -->
+
+<!-- |:----------------------:|:-------------------|:------------| -->
+
+<!-- |  **Gli Aromatizzati**  | Una forma 1,5-3 kg |             | -->
+
+<!-- | ---------------------- | ------------       | ----------- | -->
+
+<!-- |     Sua Eccellenza     | \< 4kg             | 32          | -->
+
+<!-- |       il Tartufo       | \< 10kg            | 30.7        | -->
+
+<!-- |                        | \> 10kg            | 28.8        | -->
+
+<!-- | ---------------------- | ------------       | ----------- | -->
+
+<!-- |     Sua Eccellenza     | \< 4kg             | 35          | -->
+
+<!-- |      il Pepe Nero      | \< 10kg            | 33.5        | -->
+
+<!-- |                        | \> 10kg            | 31.5        | -->
+
+<!-- | ---------------------- | ------------       | ----------- | -->
+
+<!-- |     Sua Eccellenza     | \< 4kg             | 37.3        | -->
+
+<!-- |     lo il Piccante     | \< 10kg            | 35.7        | -->
+
+<!-- |                        | \> 10kg            | 33.6        | -->
+
+<!-- | ---------------------- | ------------       | ----------- | -->
+
+<!-- |     Sua Eccellenza     | \< 4kg             | 37.3        | -->
+
+<!-- |    lo il Pistacchio    | \< 10kg            | 35.7        | -->
+
+<!-- |                        | \> 10kg            | 33.6        | -->
+
+<!-- | ---------------------- | ------------       | ----------- | -->
+
+<!-- |     Sua Eccellenza     | \< 4kg             | 37.3        | -->
+
+<!-- |      la Castagna       | \< 10kg            | 35.7        | -->
+
+<!-- |                        | \> 10kg            | 33.6        | -->
+
+<!-- | ---------------------- | ------------       | ----------- | -->
+
+<!-- I Formaggi di La Fonte -->
+
+<!-- ::: -->
+
+<!-- : {tbl-colwidths="[30,70]"} -->
+
+<!-- | Default | Left | Right | Center | -->
+
+<!-- |---------|:-----|------:|:------:| -->
+
+<!-- | 12      | 12   |    12 |   12   | -->
+
+<!-- | 123     | 123  |   123 |  123   | -->
+
+<!-- | 1       | 1    |     1 |   1    | -->
+
+<!-- : Demonstration of pipe table syntax -->

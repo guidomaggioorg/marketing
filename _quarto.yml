@@ -1,0 +1,21 @@
+project:
+  title: "Marketing Merkanzia"
+
+editor: visual
+
+execute:
+  echo: false
+  eval: false
+  warning: false
+output-dir: docs
+
+# mainfont: "Oswald Regular"
+
+date-format: |
+  | MMMM D, YYYY
+  |
+  |
+  | [info@merkanzia.com]
+
+incremental: false
+
