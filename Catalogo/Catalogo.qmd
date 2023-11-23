@@ -26,11 +26,9 @@ output-dir: docs
 incremental: false
 ---
 
-
 ## Quarto
 
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
 
 ## Running Code
 
@@ -49,7 +47,7 @@ You can add options to executable code like this
 
 The `echo: false` option disables the printing of code (only output is displayed).
 
-\section
+\\section
 
 ## 3rd column
 

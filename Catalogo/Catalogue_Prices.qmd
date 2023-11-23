@@ -64,15 +64,17 @@ p_la_f_semistag_orig <- 16.96
 p_la_f_ilfresc_orig <- 15.53
 p_la_f_stag_orig <- 18.09
 
+.digits_price <- 1
+
 # p_la_f_semistag <- c(35,33.5,31.5) %>%
 #   setNames(Peso)
-discount_laf <- 0.1
-baseprise <- 35
+discount_laf <- 0.1 # for high quantities
+baseprise <- 34 #35 # base price for B2B
 
 p_la_f_semistag <- c(baseprise, (1-discount_laf)* baseprise) %>%
   setNames(Peso)
 
-.price_kg <- function(pec, digits = 2, plist = p_la_f_semistag, ref = p_la_f_semistag_orig) {
+.price_kg <- function(pec, digits = .digits_price, plist = p_la_f_semistag, ref = p_la_f_semistag_orig) {
   round(plist * pec / ref, digits)
 }
 
@@ -213,20 +215,22 @@ data_all <- bind_rows(data_cla, data_aro, data_aff, data_grare, data_latt)
 # Salumi
 p_s_mons_fin_orig <-  10
 p_s_mons_por_orig <-  10.5
+# dazi 80%
 
-baseprise_por <- 45
-baseprise_fino <- 42
+# 42 for alfredo
+baseprise_por <- 42 #45
+baseprise_fino <- 40 #42
 
 discount_mmos <- 0.08
 
-.price_kg_mons_disc <-  function(pec,  disc, digits = 2) {
+.price_kg_mons_disc <-  function(pec,  disc, digits = .digits_price) {
   c(pec, round(pec * (1-disc), digits))
 }
 
   
 factor_margin <- list("porchette" = c(4.285,3.975), "finocchione" = c(4.18,3.85))
 
-.price_kg_mons <-  function(pec,  marg, digits = 2) {
+.price_kg_mons <-  function(pec,  marg, digits = .digits_price) {
   round(marg * pec, digits)
 }
 
@@ -263,7 +267,20 @@ main_header_fino <- tibble(main_product_fino, main_quant_fino, main_pic) %>%
 data_por <- .makedata_header(main_header_por, prices_names_mons[1], peso = Quantita)
 data_fino <- .makedata_header(main_header_fino, prices_names_mons[2], peso = Quantita)
 
+
+###############
+# Salse Sughi
+
+p_luca_agl_orig <- 5.4
+p_luca_pate_orig <- 4.4
+p_luca_ribo_orig <- 5.95
+p_luca_scot_orig <- 6.3
+p_luca_cing_orig <- 6.3
+
+
+
 DPI.ALL <- 420
+
 
 kable_fun <- function(dat, footnote_arg = list(general_title =  "gg: Giorni Stagionatura", general = "" )) {
   kableExtra::kable(dat, #align = 'l', 
