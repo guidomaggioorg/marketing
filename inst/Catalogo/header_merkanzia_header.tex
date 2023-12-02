@@ -1,0 +1,40 @@
+\usepackage{titling}
+\usepackage{fancyhdr, blindtext}
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{pagecolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{tcolorbox}
+
+\definecolor{merkgreen}{RGB}{202,211,68}
+\definecolor{merkdarkgreen}{RGB}{52,93,70}
+\definecolor{merkyellow}{RGB}{247,233,9}
+
+\definecolor{bggray}{rgb}{0.95,0.95,0.95}
+\pagestyle{fancy}
+\pretitle{\begin{center}
+  \includegraphics[width=5in,height=3.5in]{logo_Merkanzia.png}\LARGE\\}
+  \pagecolor{merkdarkgreen}
+\posttitle{\end{center}}
+\fancyhf{}
+\newpage
+\newpagecolor{merkgreen}
+% \begin{tcolorbox}[
+%     title="Prezzi",
+% %   opacityback=1,  % this does not work
+% %   colback=white,  % this is not what I want
+% ]
+\fancyfoot[R]{\footnotesize \textit{www.merkanzia.com info@merkanzia.com}}
+\fancyfoot[L]{\footnotesize \textit{Merkanzia GmbH, La Toscana in Svizzera}}

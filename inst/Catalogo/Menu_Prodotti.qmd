@@ -1,0 +1,355 @@
+---
+title: "I nostri Prodotti"
+subtitle: "Unsere Produckte aus Toskana"
+author: "Merkanzia"
+date: today
+format:
+  pdf:
+    # theme: espresso
+    toc: false
+    colorlinks: true
+    # mainfont: 'Ubuntu'
+    monofont: 'Source Code Pro'
+    # documentclass: report 
+    # classoption: [twocolumn, landscape]
+    # mainfont: "Oswald Regular"
+    monofontoptions: 
+      - Scale=0.6
+    # page-layout: full
+    # template: header_merkanzia.tex
+    # template-partials:
+    #   - header_merkanzia_header.tex
+    # classoption: [landscape] # trigger this with the beamer papersize, to redo the chunks
+    documentclass: scrreprt
+    papersize: beamer
+    classoption: "aspectratio=54"
+    keep-tex: true
+    include-in-header:
+      - header_merkanzia.tex
+  
+editor: visual
+geometry:
+  - left=.7in
+  - right=.7in
+  - marginparsep=.25in
+execute: 
+  # echo: false
+  eval: true
+  warning: false
+output-dir: docs
+# incremental: false
+engine: knitr
+---
+
+<!-- Check this issue for the toc -->
+<!-- # https://github.com/quarto-dev/quarto-cli/discussions/5935 -->
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(tidyverse)
+library(kableExtra)
+library(knitr)
+
+DPI.ALL <- 420
+
+CM.table.width = "16cm" # if pic below text
+# CM.table.width = "6cm" # if pic right of text
+
+
+kable_fun <- function(dat, footnote_arg = list(general_title =  "gg: Giorni Stagionatura", general = "" ), cmcol = CM.table.width) 
+{
+  kableExtra::kable(dat, #align = 'l', 
+                  booktabs = TRUE, format = "latex", escape = T) %>%
+        #kable_paper(full_width = F) %>%
+        kable_classic("basic", full_width = F) %>%
+        #column_spec(1, width = "6cm", bold = F, italic = F) %>% # 6cm if the pc is on the right
+        column_spec(1, width = cmcol, bold = F, italic = F) %>% # 15cm if the pc is below the text and full page
+        collapse_rows(columns=1, valign="top", row_group_label_position = 'identity', latex_hline = "custom", custom_latex_hline = 1)  %>%
+        kable_styling(position = "left",  latex_options = c("hold_position"), html_font = "sans-serif", font_size = 16) %>% row_spec(row = 0, bold = TRUE, font_size = 18) #%>% footnote(footnote_arg)
+}
+
+```
+<!-- \renewcommand{\arraystretch}{1.6} -->
+
+
+```{r}
+#| label: tbl-panel-panino
+#| tbl-cap-location: top
+#| tbl-cap: "Panini Porchetta / Finocchiona"
+#| tbl-subcap:
+#|   - "Ciabatta rustica"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+dat <- data.frame("Produkt" = "Sandwich Porchetta / Finocchiona", "Beschreibung" = "Ciabatta rustica mit Finocchiona oder mit Porchetta. Zutaten: Pecorino Semistagionato, Friarelli oder getrocknete Tomaten.")     
+
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+
+kable_fun(dat)
+knitr::include_graphics("../img/paninoporchetta.jpg", dpi = DPI.ALL)
+
+```
+
+<!-- #| layout: [[40,60]] to get 2 pages -->
+
+
+```{r}
+#| label: tbl-panel-fleisch
+#| tbl-cap-location: top
+#| tbl-cap: "Finocchiona"
+#| tbl-subcap:
+#|   - "Fenkelsalami"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+dat <- data.frame("Produkt" = "Finocchiona", "Beschreibung" = "Die typische Salami mit Fenchel aus der Toskana, angereichert mit der Anerkennung der Geschützten Geografischen Identifikation.")     
+
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+
+kable_fun(dat)
+knitr::include_graphics("../img/Finocchiona-IGP.jpg", dpi = DPI.ALL)
+
+```
+\break
+
+```{r}
+#| label: tbl-panel-fleisch2
+#| tbl-cap-location: top
+#| tbl-cap: "Porchetta"
+#| tbl-subcap:
+#|   - "Schweinbraten"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+#| toc: false
+
+
+dat <- data.frame("Produkt" = rep("Porchetta",2), "Beschreibung" = c("Schweinbraten gewürzt mit einer Mischung aus Salz, Knoblauch, Rosmarin, Pfeffer, Kräutern und wilden Fenchelblüte.", "Im Holzbackofen gebacken.")   )
+
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[1,1])
+
+kable_fun(dat)
+knitr::include_graphics("../img/Porchetta-Tronchetto-cotto-a-legna.jpg", dpi = DPI.ALL )
+
+```
+
+```{r}
+#| label: tbl-panel-cheese
+#| tbl-cap-location: top
+#| tbl-cap: "Pecorino"
+#| tbl-subcap:
+#|   - "Sua Eccellenza il Grande"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+dat <- data.frame("Produkt" = "il Grande", "Beschreibung" = "Schafsmilch von ausgewählten italienischen Bauernhöfen. Reifung (90 Tage) auf Holzbrettern und/oder in kostbaren Terrakotta-Gefässen.")        
+
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+
+kable_fun(dat)
+knitr::include_graphics("../img/IlGrande1024_1.png", dpi = DPI.ALL)
+
+
+```
+
+\break
+
+```{r}
+#| label: tbl-panel-cheese2
+#| tbl-cap-location: top
+#| tbl-cap: "Pecorino"
+#| tbl-subcap:
+#|   - "Sua Eccellenza il Semistagionato"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+
+
+dat <- data.frame("Produkt" = "il Semistagionato", "Beschreibung" = c("Schafsmilch von ausgewählten italienischen Bauernhöfen. Reifung (60 Tage) auf Holzbrettern und/oder in kostbaren Terrakotta-Gefässen.")   )
+
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+kable_fun(dat)
+knitr::include_graphics("../img/SuaEccellenzaIlSemiStagionato.png", dpi = DPI.ALL)
+
+```
+
+
+```{r}
+#| label: tbl-panel-primi
+#| tbl-cap-location: top
+#| tbl-cap: "Suppe"
+#| tbl-subcap:
+#|   - "Ribollita aus Siena"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+dat <- data.frame("Produkt" = "Ribollita", "Beschreibung" = "Toskanischen Bauerntradition: Kartoffeln, Bohnen, Schwarzkohl, Wirsing, Karotten, Sellerie, Zwiebeln, Zucchini, Tomatenmark, Olivenöl, natürliche Aromen, Salz.")        
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+kable_fun(dat)
+knitr::include_graphics("../img/Ribollita.jpeg", dpi = DPI.ALL)
+
+
+```
+\break
+
+```{r}
+#| label: tbl-panel-primi2
+#| tbl-cap-location: top
+#| tbl-cap: "Suppe"
+#| tbl-subcap:
+#|   - "Scottiglia aus Monte Amiata"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+
+dat <- data.frame("Produkt" = rep("Scottiglia",2), "Beschreibung" = c("Ein typisches Gericht aus Pescina (Monte Amiata).", "Rindfleisch (50%), Schweinefleisch (39%), Tomatenmark (10%), Rotwein, Olivenöl, natürliche Aromen, Salz, Pfeffer.")   )
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[1,1])
+
+kable_fun(dat)
+knitr::include_graphics("../img/la-scottiglia.jpg", dpi = DPI.ALL)
+
+
+```
+
+```{r}
+#| label: tbl-panel-gnocchi
+#| tbl-cap-location: top
+#| tbl-cap: "Gnocchi"
+#| tbl-subcap:
+#|   - "Gnocchi Ragu"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+dat <- data.frame("Produkt" = "Gnocchi al Ragu'", "Beschreibung" = "Handgemachte Kartoffelgnocchi mit Fleischragout.")        
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+kable_fun(dat)
+knitr::include_graphics("../img/Gnocchi-al-Ragu-1280x720.jpg", dpi = DPI.ALL)
+
+
+```
+\break
+
+```{r}
+#| label: tbl-panel-aglio
+#| tbl-cap-location: top
+#| tbl-cap: "Aglione Val di Chiana"
+#| tbl-subcap:
+#|   - "Aglione Sosse"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+dat <- data.frame("Produkt" = "Aglione", "Beschreibung" = c("Tomatensauce mit einer Knoblauchsorte, die in der Region Val di Chiana angebaut wird. Grössere Grösse, feineres Aroma und hohe Verdaulichkeit.")   )
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+kable_fun(dat)
+knitr::include_graphics("../img/pici-all-aglione.jpg", dpi = DPI.ALL)
+
+```
+
+```{r}
+#| label: tbl-panel-panza
+#| tbl-cap-location: top
+#| tbl-cap: "Panzanella"
+#| tbl-subcap:
+#|   - "Toskanischer Brotsalat"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+dat <- data.frame("Produkt" = "Panzanella", "Beschreibung" = c("Ein armes, vegetarisches Gericht bäuerlichen Ursprungs: Trocknen Sie das Brot (um es nicht wegzuwerfen) und kombinieren Sie es mit Gemüse aus Ihrem eigenen Garten.")   )
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+kable_fun(dat)
+knitr::include_graphics("../img/Panzanella.png", dpi = DPI.ALL)
+
+```
+\break
+```{r}
+#| label: tbl-panel-ceci
+#| tbl-cap-location: top
+#| tbl-cap: "Zuppa di Ceci"
+#| tbl-subcap:
+#|   - "Kichererbsen-Suppe"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+dat <- data.frame("Produkt" = "Zuppa di Ceci", "Beschreibung" = c("Nach alter Tradition zubereitete Suppe mit frischen Produkten: hauptsächlich Kichererbsen und Schwarzkohl.")   )
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+kable_fun(dat)
+knitr::include_graphics("../img/zuppa-ceci.png", dpi = DPI.ALL)
+
+```
+
+```{r}
+#| label: tbl-panel-dolci
+#| tbl-cap-location: top
+#| tbl-cap: "Ricciarelli alle Mandorle"
+#| tbl-subcap:
+#|   - "Ricciarelli aus Siena"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+dat <- data.frame("Produkt" = "Ricciarelli", "Beschreibung" = "Der Ursprung der Ricciarelli geht auf das fünfzehnte Jahrhundert in Siena zurück. Es handelt sich um rautenförmige Kekse, die aus Mandelmehl hergestellt und mit Vanillezucker bestreut werden.")
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+kable_fun(dat)
+knitr::include_graphics("../img/Ricciarelli.png", dpi = DPI.ALL)
+
+```
+
+
+```{r}
+#| label: tbl-panel-cast
+#| tbl-cap-location: top
+#| tbl-cap: "Castagne"
+#| tbl-subcap:
+#|   - "Marroni aus Monte Amiata"
+#| fig-width: 12
+#| fig-align: "right"
+#| echo: false
+#| include: true
+
+
+dat <- data.frame("Produkt" = "Marroni", "Beschreibung" = "Die Marrone wächst natürlich in den Wäldern des Monte Amiata. Sie zeichnet sich durch ihre längliche Form und die Qualität ihres feinen Fruchtfleisches aus, das einen süssen und intensiven Geschmack hat.")    
+dat <- data.frame(col1 = dat[,2]) %>% setNames(dat[,1])
+
+kable_fun(dat)
+knitr::include_graphics("../img/Marroni_padella.jpeg", dpi = DPI.ALL)
+
+```
+
+
+
+
+

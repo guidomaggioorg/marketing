@@ -1,0 +1,337 @@
+---
+title: "Catalogo Prodotti e Prezzi"
+subtitle: "Merkanzia GmbH - La Toscana in Svizzera"
+author: ""
+date: today
+# date-format: |
+#   | MMMM D, YYYY
+#   |
+#   |
+#   | [info@merkanzia.com]
+format:
+  pdf:
+    # theme: espresso
+    toc: false
+    colorlinks: true
+    # mainfont: 'Ubuntu'
+    monofont: 'Source Code Pro'
+    # documentclass: report 
+    # classoption: [twocolumn, landscape]
+    # mainfont: "Oswald Regular"
+    monofontoptions: 
+      - Scale=0.6
+    # page-layout: full
+    # template: header_merkanzia.tex
+    # template-partials:
+    #   - header_merkanzia_header.tex
+    # classoption: [landscape] # trigger this with the beamer papersize, to redo the chunks
+    documentclass: scrreprt
+    papersize: beamer
+    classoption: "aspectratio=54"
+    keep-tex: true
+    include-in-header:
+      - header_merkanzia.tex
+  
+editor: visual
+execute: 
+  # echo: false
+  eval: true
+  warning: false
+output-dir: docs
+# incremental: false
+engine: knitr
+params:
+  B2B: TRUE
+---
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(dplyr)
+library(kableExtra)
+library(knitr)
+
+pkgload::load_all(export_all = TRUE, helpers = FALSE, attach_testthat = FALSE)
+
+# Quantita', con sconto
+Peso <- c(#"< 4kg", 
+          "< 10 kg", "> 10kg")
+
+# p_la_f_semistag <- c(35,33.5,31.5) %>%
+#   setNames(Peso)
+discount_laf <- 0.1 # for high quantities
+# baseprise <- 34 #35 # base price for B2B
+
+# p_la_f_semistag <- c(baseprise, (1-discount_laf)* baseprise) %>%
+#   setNames(Peso)
+# 
+# .price_kg <- function(pec, digits = .digits_price, plist = p_la_f_semistag, ref = lafonte_iclassici()[[2]]) {
+#   # lafonte_iclassici()[[2]] is semistagionato
+#   round(plist * pec / ref, digits)
+# }
+
+dazi <- 0.05
+# margine basso
+margin <- 2
+
+factor_margin <- c(margin,margin * (1-discount_laf)) %>%
+  setNames(Peso)
+
+prices_names_cla <- mapply(price_calc, pec = lafonte_iclassici(), MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+prices_names_aro <- mapply(price_calc, pec = lafonte_gliaromatici(), MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+prices_names_aff <- mapply(price_calc, pec = lafonte_gliaffinati(), MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+prices_names_grare <- mapply(price_calc, pec = lafonte_ilgrande_e_i_re(), MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+prices_names_latt <- mapply(price_calc, pec = lafonte_lattesiena(), MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+
+# prices_names_cla <- lapply(lafonte_iclassici(), .price_kg) # %>% setNames(IClassici)
+# 
+# prices_names_aro <- lapply(lafonte_gliaromatici(), .price_kg) # %>% setNames(IClassici)
+# 
+# prices_names_aff <- lapply(lafonte_gliaffinati(), .price_kg) # %>% setNames(IClassici)
+# 
+# prices_names_grare <- lapply(lafonte_ilgrande_e_i_re(), .price_kg) # %>% setNames(IClassici)
+# 
+# 
+# prices_names_latt <- lapply(lafonte_lattesiena(), .price_kg) # %>% setNames(IClassici)
+
+
+col_names_tab <- c("Prodotto", "Quantità" , "CHF/Kg" )
+# colnames_d <- names(data)
+
+main_product_cla <- "I Classici di La Fonte"
+main_product_aro <- "Gli Aromatizzati di La Fonte"
+main_product_aff <- "Gli Affinati di La Fonte"
+main_product_grare <- "Il Grande e i Re"
+main_product_latt <- "Linea Latte di Siena"
+
+
+main_quant_cla <- "Una forma 1,5 kg"
+main_quant_aro <- "Una forma 1,5-3 kg"
+main_quant_aff <- main_quant_aro
+main_quant_grare <- main_quant_aff
+main_quant_latt <- "Una forma 1,5-5 kg"
+
+
+main_pic <- ""
+
+main_header_cla <- tibble(main_product_cla, main_quant_cla, main_pic) %>%
+  setNames(col_names_tab)
+main_header_aro <- tibble(main_product_aro, main_quant_aro, main_pic) %>%
+  setNames(col_names_tab)
+main_header_aff <- tibble(main_product_aff, main_quant_aff, main_pic) %>%
+  setNames(col_names_tab)
+main_header_grare <- tibble(main_product_grare, main_quant_grare, main_pic) %>%
+  setNames(col_names_tab)
+main_header_latt <- tibble(main_product_latt, main_quant_latt, main_pic) %>%
+  setNames(col_names_tab)
+
+# function for data header
+.makedata_header <- function(main_header, prices_names , peso = Peso, col_names = col_names_tab) {
+  main_header %>% 
+    bind_rows(tibble(Prodotto = rep(names(prices_names), each = length(peso)), 
+           `Quantita` = rep(peso, times = length(prices_names)),
+           Prezzo = as.character(unlist(prices_names))) %>%
+  setNames(col_names)) 
+}
+
+data_cla <- .makedata_header(main_header_cla, prices_names_cla)
+data_aro <- .makedata_header(main_header_aro, prices_names_aro)
+data_aff <- .makedata_header(main_header_aff, prices_names_aff)
+data_grare <- .makedata_header(main_header_grare, prices_names_grare)
+data_latt <- .makedata_header(main_header_latt, prices_names_latt)
+
+data_all <- bind_rows(data_cla, data_aro, data_aff, data_grare, data_latt)
+
+##########################################
+# Salumi
+# dazi 80%
+dazi <- 0.8
+
+# 42 for alfredo
+# baseprise_por <- 42 #45
+# baseprise_fino <- 40 #42
+# 
+# discount_mmos <- 0.08
+
+# .price_kg_mons_disc <-  function(pec,  disc, digits = .digits_price) {
+#   c(pec, round(pec * (1-disc), digits))
+# }
+# factor_margin <- list("porchette" = c(4.285/2,3.975/2), "finocchione" = c(4.18/2,3.85/2))
+factor_margin <- list("porchette" = c(2.05,1.825), "finocchione" = c(2.35,2.1))
+
+.price_kg_mons <-  function(pec,  marg, digits = .digits_price, dazi = dazi) {
+  round(marg * (pec + pec* dazi), digits)
+}
+
+# Mac_mon_S_Savino <- c("Macelleria Monte San Savino")
+
+main_product_por <- "Porchetta"
+main_product_fino <- "Finocchiona"
+
+# Mac_mon_S_Savino <- c("Tronchetto Cotto a Legna", "Finocchiona IGP")
+
+# prices_names_mons <- mapply(.price_kg_mons, pec = monte_san_savino(), marg = factor_margin, MoreArgs = list(dazi = dazi) ,SIMPLIFY = FALSE) 
+
+prices_names_mons <- mapply(price_calc, pec = monte_san_savino(), marg = factor_margin, MoreArgs = list(dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+
+
+Quantita <- c("1/2 o 1", ">1")
+main_quant_fino <- "10-12 kg"
+main_quant_por <- "8-11 Kg"
+
+main_header_por <- tibble(main_product_por, main_quant_por, main_pic) %>%
+  setNames(col_names_tab)
+main_header_fino <- tibble(main_product_fino, main_quant_fino, main_pic) %>%
+  setNames(col_names_tab)
+
+data_por <- .makedata_header(main_header_por, prices_names_mons[1], peso = Quantita)
+data_fino <- .makedata_header(main_header_fino, prices_names_mons[2], peso = Quantita)
+
+###############
+# Salse Sughi
+
+# LUCA #
+
+Quantita <- c("<10", ">=10")
+dazi <- 0.05
+# margine basso
+factor_margin <- c(1.85,1.7)
+
+prices_names_sughi_daluca <- mapply(price_calc, pec = daluca_sughi()$products, MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+
+col_names_luca <- c("Prodotto", "Quantità" , "CHF" )
+
+main_header_luca_sughi <- tibble("Sughi di Luca", "Barattolo Vetro", main_pic) %>%
+  setNames(col_names_luca)
+
+data_luca_sughi <- .makedata_header(main_header_luca_sughi, prices_names_sughi_daluca, peso = Quantita, col_names = col_names_luca)
+
+
+prices_names_pate_daluca <- mapply(price_calc, pec = daluca_pate()$products, MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+
+main_header_luca_pate <- tibble("Pate' di Luca", "Barattolo Vetro", main_pic) %>%
+  setNames(col_names_luca)
+data_luca_pate <- .makedata_header(main_header_luca_pate, prices_names_pate_daluca, peso = Quantita, col_names = col_names_luca)
+
+
+DPI.ALL <- 420
+
+
+```
+
+\renewcommand{\arraystretch}{1.6}
+
+# Catalogo Prezzi `r ifelse(params$B2B, "B2B", "B2C")`
+
+Merkanzia è la vostra porta d'accesso al cuore della tradizione culinaria toscana.
+
+Il Catalogo dei prodotti con i rispettivi prodotti e prezzi di Merkanzia.
+
+La nostra missione è portare in Svizzera prodotti di altissima qualità provenienti da piccoli produttori artigianali che onorano le più antiche tradizioni dell'artigianato alimentare toscano. 
+
+Con Merkanzia, potrete assaporare i sapori autentici della Toscana, prodotti con amore da chi ha un profondo rispetto per il suo patrimonio culinari.
+
+Formaggi, insaccati, sughi per primi piatti tipici toscani, le zuppe famose della tradizione contadina, dolci e tanto altro.
+
+![Siena.](../../img/Siena-n-1-scaled.jpg)
+
+
+```{r}
+#| label: tbl-panel-cla-aro
+#| tbl-cap-location: top
+#| tbl-cap: "Caseificio La Fonte (Asciano - Siena)"
+#| tbl-subcap:
+#|   - "I Classici"
+#|   - "Gli Aromatizzati"
+#| fig-width: 10
+#| fig-align: "right"
+#| layout: [[60,40], [60,40]]
+#| echo: false
+#| include: true
+
+# cat("\\renewcommand{\\arraystretch}{2}   \n")
+
+knitr::opts_chunk$set(class.source = "watch-out")
+kable_fun(data_cla)
+knitr::include_graphics("../../img/LaFonte_IClassici1024_1.jpeg", dpi = DPI.ALL)
+kable_fun(data_aro)
+knitr::include_graphics("../../img/LaFonte_gliaromatizzati1024_1.png", dpi = DPI.ALL)
+```
+
+\renewcommand{\arraystretch}{1.6}
+
+```{r}
+#| label: tbl-panel-aff-grare
+#| tbl-cap-location: top
+#| tbl-cap: "Caseificio La Fonte (Asciano - Siena)"
+#| tbl-subcap:
+#|   - "Gli Affinati"
+#|   - "Il Grande ed i Re"
+#| fig-width: 10
+#| fig-align: "right"
+#| layout: [[60,40], [60,40]]
+#| echo: false
+#| include: true
+kable_fun(data_aff)
+knitr::include_graphics("../../img/LaFonte_GliAffinati1024_1.png", dpi = DPI.ALL)
+kable_fun(data_grare)
+knitr::include_graphics("../../img/IlGrande1024_1.png", dpi = DPI.ALL)
+
+```
+
+\renewcommand{\arraystretch}{1.6}
+
+```{r}
+#| label: tbl-panel-latt
+#| tbl-cap-location: top
+#| tbl-cap: "Caseificio La Fonte (Asciano - Siena)"
+#| tbl-subcap:
+#|   - "Linea Latte di Siena"
+#| fig-width: 10
+#| fig-align: "right"
+#| layout: [[60,40]]
+#| echo: false
+#| include: true
+kable_fun(data_latt)
+knitr::include_graphics("../../img/Latte_di_siena1024_1.png", dpi = DPI.ALL)
+```
+
+```{r}
+#| label: tbl-panel-mmons
+#| tbl-cap-location: top
+#| tbl-cap: "Salumeria di Monte San Savino"
+#| tbl-subcap:
+#|   - "Porchette"
+#|   - "Finocchione"
+#| fig-width: 10
+#| fig-align: "right"
+#| layout: [[60,40]]
+#| echo: false
+#| include: true
+
+kable_fun(data_por, footnote_arg = list(general_title =  "Quantità indica il peso di un pezzo", general = "" ))
+knitr::include_graphics("../../img/Tronchetto-cotto-a-legna.jpg", dpi = DPI.ALL)
+kable_fun(data_fino, footnote_arg = list(general_title =  "Quantità indica il peso di un pezzo", general = "" ))
+knitr::include_graphics("../../img/Finocchiona-IGP.jpg", dpi = DPI.ALL)
+```
+
+```{r}
+#| label: tbl-panel-luca
+#| tbl-cap-location: top
+#| tbl-cap: "I Sughi di Luca (Monte Amiata)"
+#| tbl-subcap:
+#|   - "Sughi / Zuppe / Pate'"
+#| fig-width: 10
+#| fig-align: "right"
+#| layout: [[60,40]]
+#| echo: false
+#| include: true
+
+kable_fun(data_luca_sughi, footnote_arg = list(general_title =  "Barattoli in vetro (300gr), scadenza 3 mesi", general = "" ))
+knitr::include_graphics("../../img/I_Sugh_d_Luca.jpg", dpi = DPI.ALL)
+
+kable_fun(data_luca_pate, footnote_arg = list(general_title =  "Barattoli in vetro (200gr), scadenza 3 mesi", general = "" ))
+knitr::include_graphics("../../img/Pate_Fegatini_daluca.png", dpi = DPI.ALL)
+
+```

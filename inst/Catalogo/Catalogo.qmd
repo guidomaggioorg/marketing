@@ -1,0 +1,54 @@
+---
+title: "Catalogo"
+subtitle: "Merkanzia GmbH - La Toscana in Svizzera"
+author: "Guido Maggio"
+date: today
+date-format: |
+  | MMMM D, YYYY
+  |
+  |
+  | [guido.maggio@merkanzia.com]
+format: 
+  pdf:
+    # theme: metropolis
+    # documentclass: article
+    # # classoption: [twocolumn, landscape]
+    # papersize: letterpaper
+    number-sections: false
+    # highlight-style: github
+include-in-header:
+  - header_vertical.tex
+# editor: visual
+execute: 
+  echo: false
+  eval: false
+output-dir: docs
+incremental: false
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+\\section
+
+## 3rd column
+
+test here some stuff
