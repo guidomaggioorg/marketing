@@ -84,18 +84,6 @@ prices_names_aff <- mapply(price_calc, pec = lafonte_gliaffinati(), MoreArgs = l
 prices_names_grare <- mapply(price_calc, pec = lafonte_ilgrande_e_i_re(), MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
 prices_names_latt <- mapply(price_calc, pec = lafonte_lattesiena(), MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
 
-# prices_names_cla <- lapply(lafonte_iclassici(), .price_kg) # %>% setNames(IClassici)
-# 
-# prices_names_aro <- lapply(lafonte_gliaromatici(), .price_kg) # %>% setNames(IClassici)
-# 
-# prices_names_aff <- lapply(lafonte_gliaffinati(), .price_kg) # %>% setNames(IClassici)
-# 
-# prices_names_grare <- lapply(lafonte_ilgrande_e_i_re(), .price_kg) # %>% setNames(IClassici)
-# 
-# 
-# prices_names_latt <- lapply(lafonte_lattesiena(), .price_kg) # %>% setNames(IClassici)
-
-
 col_names_tab <- c("Prodotto", "Quantità" , "CHF/Kg" )
 # colnames_d <- names(data)
 
@@ -207,7 +195,6 @@ main_header_luca_sughi <- tibble("Sughi di Luca", "Barattolo Vetro", main_pic) %
 
 data_luca_sughi <- .makedata_header(main_header_luca_sughi, prices_names_sughi_daluca, peso = Quantita, col_names = col_names_luca)
 
-
 prices_names_pate_daluca <- mapply(price_calc, pec = daluca_pate()$products, MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
 
 main_header_luca_pate <- tibble("Pate' di Luca", "Barattolo Vetro", main_pic) %>%
@@ -234,7 +221,7 @@ Con Merkanzia, potrete assaporare i sapori autentici della Toscana, prodotti con
 
 Formaggi, insaccati, sughi per primi piatti tipici toscani, le zuppe famose della tradizione contadina, dolci e tanto altro.
 
-![Siena.](../img/Siena-n-1-scaled.jpg)
+![](../img/Siena-n-1-scaled.jpg){width=80% fig-align="center"}
 
 
 ```{r}
@@ -297,6 +284,8 @@ kable_fun(data_latt)
 knitr::include_graphics("../img/Latte_di_siena1024_1.png", dpi = DPI.ALL)
 ```
 
+\renewcommand{\arraystretch}{1.6}
+
 ```{r}
 #| label: tbl-panel-mmons
 #| tbl-cap-location: top
@@ -315,23 +304,75 @@ knitr::include_graphics("../img/Tronchetto-cotto-a-legna.jpg", dpi = DPI.ALL)
 kable_fun(data_fino, footnote_arg = list(general_title =  "Quantità indica il peso di un pezzo", general = "" ))
 knitr::include_graphics("../img/Finocchiona-IGP.jpg", dpi = DPI.ALL)
 ```
+\renewcommand{\arraystretch}{1.6}
+
 
 ```{r}
 #| label: tbl-panel-luca
 #| tbl-cap-location: top
 #| tbl-cap: "I Sughi di Luca (Monte Amiata)"
 #| tbl-subcap:
-#|   - "Sughi / Zuppe / Pate'"
-#| fig-width: 10
+#|   - "Sughi / Zuppe"
+#|   - "Pate'"
+#| fig-width: 5
 #| fig-align: "right"
+#| fig-column: margin
 #| layout: [[60,40]]
 #| echo: false
 #| include: true
 
 kable_fun(data_luca_sughi, footnote_arg = list(general_title =  "Barattoli in vetro (300gr), scadenza 3 mesi", general = "" ))
 knitr::include_graphics("../img/I_Sugh_d_Luca.jpg", dpi = DPI.ALL)
-
 kable_fun(data_luca_pate, footnote_arg = list(general_title =  "Barattoli in vetro (200gr), scadenza 3 mesi", general = "" ))
 knitr::include_graphics("../img/Pate_Fegatini_daluca.png", dpi = DPI.ALL)
 
+
 ```
+
+
+<!-- ```{r} -->
+<!-- #| label: tbl-panel-luca2 -->
+<!-- #| tbl-cap-location: top -->
+<!-- #| tbl-cap: "I Sughi di Luca (Monte Amiata)" -->
+<!-- #| tbl-subcap: -->
+<!-- #|   - "Sughi / Zuppe / Pate'" -->
+<!-- #| fig-align: "right" -->
+<!-- #| echo: false -->
+<!-- #| include: true -->
+
+<!-- kable_fun(data_luca_sughi, footnote_arg = list(general_title =  "Barattoli in vetro (300gr), scadenza 3 mesi", general = "" )) -->
+<!-- # knitr::include_graphics("../img/I_Sugh_d_Luca.jpg", dpi = DPI.ALL) -->
+<!-- # kable_fun(data_luca_pate, footnote_arg = list(general_title =  "Barattoli in vetro (200gr), scadenza 3 mesi", general = "" )) -->
+<!-- # knitr::include_graphics("../img/Pate_Fegatini_daluca.png", dpi = DPI.ALL) -->
+
+<!-- ``` -->
+
+<!-- # ```{r} -->
+<!-- # #| label: tbl-panel-luca3 -->
+<!-- # #| fig-align: "right" -->
+<!-- # #| fig-column: margin -->
+<!-- # #| column: margin -->
+<!-- # #| echo: false -->
+<!-- # #| include: true -->
+<!-- #  -->
+<!-- # knitr::include_graphics("../img/I_Sugh_d_Luca.jpg") -->
+<!-- # # kable_fun(data_luca_pate, footnote_arg = list(general_title =  "Barattoli in vetro (200gr), scadenza 3 mesi", general = "" )) -->
+<!-- # # knitr::include_graphics("../img/Pate_Fegatini_daluca.png", dpi = DPI.ALL) -->
+<!-- #  -->
+<!-- # ``` -->
+
+
+
+<!-- \renewcommand{\arraystretch}{1.6} -->
+
+
+<!-- \noindent% -->
+<!-- \begin{minipage}{.8\textwidth} -->
+
+<!-- test -->
+<!-- \end{minipage}% -->
+<!-- \hfill -->
+<!-- \begin{minipage}{.7\textwidth} -->
+<!-- \includegraphics[width=\linewidth]{../img/I_Sugh_d_Luca.jpg} -->
+<!-- \end{minipage}% -->
+
