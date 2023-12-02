@@ -15,7 +15,7 @@ kable_fun(
 \item{footnote_arg}{list, footnotes info}
 }
 \value{
-kableExtra object
+kableExtra object kable_classic column_spec collapse_rows kable_styling
 }
 \description{
 Function to print PDF table

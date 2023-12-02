@@ -3,9 +3,10 @@
 #' @param dat data.frame dati
 #' @param footnote_arg list, footnotes info
 #'
-#' @import kableExtra dplyr
+#' @import dplyr
+#' @importFrom kableExtra kable
 #'
-#' @return kableExtra object
+#' @return kableExtra object kable_classic column_spec collapse_rows kable_styling
 #' @export
 #'
 kable_fun <- function(dat, footnote_arg = list(general_title =  "gg: Giorni Stagionatura", general = "" )) {

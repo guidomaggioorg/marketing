@@ -26,8 +26,8 @@ format:
     #   - header_merkanzia_header.tex
     # classoption: [landscape] # trigger this with the beamer papersize, to redo the chunks
     documentclass: scrreprt
-    papersize: beamer
-    classoption: "aspectratio=54"
+    # papersize: beamer
+    # classoption: "aspectratio=54"
     keep-tex: true
     include-in-header:
       - header_merkanzia.tex
@@ -201,9 +201,23 @@ main_header_luca_pate <- tibble("Pate' di Luca", "Barattolo Vetro", main_pic) %>
   setNames(col_names_luca)
 data_luca_pate <- .makedata_header(main_header_luca_pate, prices_names_pate_daluca, peso = Quantita, col_names = col_names_luca)
 
+# Fungo Amiata #
 
+Quantita <- c("<10", ">=10")
+dazi <- 0.05
+# margine basso
+factor_margin <- c(2.2,1.9)
+
+prices_names_famiata <- mapply(price_calc, pec = famiata()$products, MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+
+
+main_header_famiata <- tibble("Fungo Amiata", "Barattolo Vetro", main_pic) %>%
+  setNames(col_names_luca) # same col names as Luca
+
+data_famiata <- .makedata_header(main_header_famiata, prices_names_famiata, peso = Quantita, col_names = col_names_luca) # same col names as Luca
+
+############
 DPI.ALL <- 420
-
 
 ```
 
@@ -223,6 +237,8 @@ Formaggi, insaccati, sughi per primi piatti tipici toscani, le zuppe famose dell
 
 ![](../img/Siena-n-1-scaled.jpg){width=80% fig-align="center"}
 
+<!-- See for info on layout -->
+<!-- https://quarto.org/docs/authoring/figures.html -->
 
 ```{r}
 #| label: tbl-panel-cla-aro
@@ -325,6 +341,25 @@ kable_fun(data_luca_sughi, footnote_arg = list(general_title =  "Barattoli in ve
 knitr::include_graphics("../img/I_Sugh_d_Luca.jpg", dpi = DPI.ALL)
 kable_fun(data_luca_pate, footnote_arg = list(general_title =  "Barattoli in vetro (200gr), scadenza 3 mesi", general = "" ))
 knitr::include_graphics("../img/Pate_Fegatini_daluca.png", dpi = DPI.ALL)
+
+```
+
+```{r}
+#| label: tbl-panel-famiata
+#| tbl-cap-location: top
+#| tbl-cap: "Fungo Amiata (Monte Amiata)"
+#| tbl-subcap:
+#|   - "Sughi / Zuppe / Pate'"
+#| fig-width: 5
+#| fig-align: "right"
+#| fig-column: margin
+#| layout: [[60,40]]
+#| echo: false
+#| include: true
+
+kable_fun(data_famiata, footnote_arg = list(general_title =  "Barattoli in vetro, scadenza 15 mesi", general = "" ))
+knitr::include_graphics(c("../img/Fungo_Amiata.jpg", "../img/crostino-toscano.jpg"), dpi = DPI.ALL)
+# knitr::include_graphics("../img/crostino-toscano.jpg", dpi = DPI.ALL)
 
 
 ```

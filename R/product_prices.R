@@ -1,4 +1,6 @@
 # all product prices per producer
+#'
+#' @importFrom stringr str_to_title
 
 lafonte_iclassici <- function() {
   IClassici <- paste("Sua Eccellenza",c("il Fresco", "il Semi Stagionato",
@@ -107,11 +109,47 @@ daluca_pate <- function() {
   )
 }
 
+famiata <- function() {
+
+  products <- c("carciofi in olio" =  6.3,
+                "porcini in olio" = 12.7,
+                "peperoni arrosto" = 5.3,
+                "zuppa di ceci" = 2.9,
+                "zuppa di funghi" = 5.2,
+                "crema di porcini" = 5.3,
+                "patè di carciofi" = 3.5,
+                "ragù di cinghiale" = 3.9,
+                "crostino toscano" = 4,
+                "porcini secchi" = 15
+                )
+  grams <- c(280, 280, 280, 390, 290, 180, 180, 180, 180, 100)
+  names(products) <- paste(names(products), paste0("(", grams, "gr)")) %>%
+    str_to_title()
+
+  list(
+    products =   as.list(products),
+    weight = as.list(grams) %>% setNames(names(products))
+  )
+}
+
 
 DIGITS.PRICE <- 1
+
+# Margin for B2C/B2B
 B2B_B2C_Margin <- 1.25
 
-price_calc <-  function(pec,  marg, digits = DIGITS.PRICE, dazi = dazi, b2b = TRUE) {
+#' Calcolo prezzi
+#'
+#' @param pec numeric cost
+#' @param marg numeric margin on cost
+#' @param digits integer rounding
+#' @param dazi numeric dazi
+#' @param b2b logical if b2b prices = 1
+#'
+#' @return numeric vector
+#' @export
+#'
+price_calc <-  function(pec,  marg = 2, digits = DIGITS.PRICE, dazi = 0, b2b = TRUE) {
   # (costo con dazi doganali) * margin, where margin is >1
   b2b_b2c <- ifelse(b2b, 1, B2B_B2C_Margin)
   round(marg * (pec + pec* dazi) * b2b_b2c, digits)

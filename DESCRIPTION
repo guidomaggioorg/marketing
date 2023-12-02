@@ -17,6 +17,7 @@ Imports:
     kableExtra,
     knitr,
     markdown,
-    quarto
+    quarto,
+    stringr
 Suggests: 
     pkgload
