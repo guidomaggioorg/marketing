@@ -338,7 +338,7 @@ knitr::include_graphics("../img/Finocchiona-IGP.jpg", dpi = DPI.ALL)
 #| include: true
 
 kable_fun(data_luca_sughi, footnote_arg = list(general_title =  "Barattoli in vetro (300gr), scadenza 3 mesi", general = "" ))
-knitr::include_graphics("../img/I_Sugh_d_Luca.jpg", dpi = DPI.ALL)
+knitr::include_graphics("../img/I_Sughi_di_Luca_Catalogo.png", dpi = DPI.ALL)
 kable_fun(data_luca_pate, footnote_arg = list(general_title =  "Barattoli in vetro (200gr), scadenza 3 mesi", general = "" ))
 knitr::include_graphics("../img/Pate_Fegatini_daluca.png", dpi = DPI.ALL)
 
@@ -358,7 +358,7 @@ knitr::include_graphics("../img/Pate_Fegatini_daluca.png", dpi = DPI.ALL)
 #| include: true
 
 kable_fun(data_famiata, footnote_arg = list(general_title =  "Barattoli in vetro, scadenza 15 mesi", general = "" ))
-knitr::include_graphics(c("../img/Fungo_Amiata.jpg", "../img/crostino-toscano.jpg"), dpi = DPI.ALL)
+knitr::include_graphics(c("../img/Fungo_Amiata_Catalogo.png"), dpi = DPI.ALL)
 # knitr::include_graphics("../img/crostino-toscano.jpg", dpi = DPI.ALL)
 
 
