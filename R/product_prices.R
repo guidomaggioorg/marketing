@@ -132,6 +132,39 @@ famiata <- function() {
   )
 }
 
+ricciarelli <- function() {
+  product0 <- NULL#, Ricciarelli"
+  products <- c("Bonucci" =  10.25,
+                "Menchetti" = 8.63,
+                "Corsini" = 5.5,
+                "IGP" = 4.54,
+                "Nocino" = 11
+  )
+  grams <- c(260, 260, 165, 165, 260)
+
+  names(products) <- paste(product0, names(products), paste0("(", grams, "gr)")) %>%
+    str_to_title()
+  list(
+    products =   as.list(products),
+    weight = as.list(grams) %>% setNames(names(products))
+  )
+}
+
+vinsanto <- function() {
+  product0 <- NULL # "Vinsanto"
+  products <- c("del Chianti DOC - Corbellicce" =  7.83,
+                "del Chianti DOC - Cherubino" = 8.85,
+                "del Chianti DOC - Coiano" = 8.69,
+                "La Vela (Viticoltori SI-AR)" = 18
+                  )
+  liters <- c(500, 375, 500, 500)
+  names(products) <- paste(product0, names(products), paste0("(", liters, "ml)")) %>%
+    str_to_title()
+  list(
+    products =   as.list(products),
+    liters = as.list(liters) %>% setNames(names(liters))
+  )
+}
 
 DIGITS.PRICE <- 1
 

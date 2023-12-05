@@ -216,6 +216,36 @@ main_header_famiata <- tibble("Fungo Amiata", "Barattolo Vetro", main_pic) %>%
 
 data_famiata <- .makedata_header(main_header_famiata, prices_names_famiata, peso = Quantita, col_names = col_names_luca) # same col names as Luca
 
+
+# Ricciarelli #
+
+Quantita <- c("<10", ">=10")
+dazi <- 0.05 # unknown
+# margine basso
+factor_margin <- c(2.1,1.8) # smaller margin
+
+prices_names_ricciarelli <- mapply(price_calc, pec = ricciarelli()$products, MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+
+main_header_ricciarelli <- tibble("Ricciarelli", "Confezione", main_pic) %>%
+  setNames(col_names_luca) # same col names as Luca
+
+data_ricciarelli <- .makedata_header(main_header_ricciarelli, prices_names_ricciarelli, peso = Quantita, col_names = col_names_luca) # same col names as Luca
+
+# Vinsanto #
+
+Quantita <- c("<10", ">=10")
+dazi <- 0.7 # unknown
+# margine basso
+factor_margin <- c(2.1,1.8) # smaller margin
+
+prices_names_vinsanto <- mapply(price_calc, pec = vinsanto()$products, MoreArgs = list(marg = factor_margin, dazi = dazi, b2b = params$B2B) ,SIMPLIFY = FALSE) 
+
+main_header_vinsanto <- tibble("Vinsanto", "Bottiglia", main_pic) %>%
+  setNames(col_names_luca) # same col names as Luca
+
+data_vinsanto <- .makedata_header(main_header_vinsanto, prices_names_vinsanto, peso = Quantita, col_names = col_names_luca) # same col names as Luca
+
+
 ############
 DPI.ALL <- 420
 
@@ -231,9 +261,11 @@ Il Catalogo dei prodotti con i rispettivi prodotti e prezzi di Merkanzia.
 
 La nostra missione è portare in Svizzera prodotti di altissima qualità provenienti da piccoli produttori artigianali che onorano le più antiche tradizioni dell'artigianato alimentare toscano. 
 
-Con Merkanzia, potrete assaporare i sapori autentici della Toscana, prodotti con amore da chi ha un profondo rispetto per il suo patrimonio culinari.
+Con Merkanzia, potrete assaporare i sapori autentici della Toscana, prodotti con amore da chi ha un profondo rispetto per il suo patrimonio culinario.
 
-Formaggi, insaccati, sughi per primi piatti tipici toscani, le zuppe famose della tradizione contadina, dolci e tanto altro.
+Formaggi, insaccati, sughi per primi piatti tipici toscani, le zuppe famose della tradizione contadina, dolci e tanto altro.\newline
+
+\vfill
 
 ![](../img/Siena-n-1-scaled.jpg){width=80% fig-align="center"}
 
@@ -361,6 +393,27 @@ kable_fun(data_famiata, footnote_arg = list(general_title =  "Barattoli in vetro
 knitr::include_graphics(c("../img/Fungo_Amiata_Catalogo.png"), dpi = DPI.ALL)
 # knitr::include_graphics("../img/crostino-toscano.jpg", dpi = DPI.ALL)
 
+```
+
+
+```{r}
+#| label: tbl-panel-ricciarelli-vinsanto
+#| tbl-cap-location: top
+#| tbl-cap: "Ricciarelli di Siena e Vinsanto"
+#| tbl-subcap:
+#|   - "Ricciarelli"
+#|   - "Vinsanto"
+#| fig-width: 5
+#| fig-align: "right"
+#| fig-column: margin
+#| layout: [[60,40]]
+#| echo: false
+#| include: true
+
+kable_fun(data_ricciarelli, footnote_arg = list(general_title =  "Confezioni da 6 a 12, scadenza 3 mesi", general = "" ))
+knitr::include_graphics(c("../img/Ricciarelli.png"), dpi = DPI.ALL)
+kable_fun(data_vinsanto, footnote_arg = list(general_title =  "Bottiglie da 0.375 o 0.5", general = "" ))
+knitr::include_graphics(c("../img/Vin_santo_generic.jpg"), dpi = DPI.ALL)
 
 ```
 
